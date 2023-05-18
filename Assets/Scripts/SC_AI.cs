@@ -7,9 +7,11 @@ public class SC_AI : MonoBehaviour
 {
     public float speed = 5;
     public float health = 100;
+    public GameObject deadAI;
 
     NavMeshAgent navMesh;
     GameObject player;
+    GameObject holding;
     SC_PlayerController playerScript;
 
     void Start()
@@ -21,16 +23,20 @@ public class SC_AI : MonoBehaviour
 
     void Update()
     {
-        if (playerScript.setAIDestination != new Vector3(999999999999, 0, 999999999999))
+        if (playerScript.setAIDestination != new Vector3(999999999999, 0, 999999999999) && !playerScript.atackTask)
         {
             navMesh.SetDestination(playerScript.setAIDestination);
         }
-        else
+        else if (!playerScript.atackTask)
         {
             navMesh.SetDestination(transform.position);
         }
+        else if (playerScript.task)
+        {
+            navMesh.SetDestination(playerScript.task.transform.position);
+        }
 
-        if (Vector3.Distance(transform.position, navMesh.destination) <= 1 && playerScript.task != null)
+        if (Vector3.Distance(transform.position, navMesh.destination) <= 1.5f && playerScript.task != null)
         {
             if (playerScript.task.transform.name.Contains("P_Tree"))
             {
@@ -42,6 +48,26 @@ public class SC_AI : MonoBehaviour
                 playerScript.task = null;
                 print("wood: " + playerScript.wood);
             }
+            else if (playerScript.task.transform.name.Contains("Sword"))
+            {
+                holding = playerScript.task;
+                holding.transform.parent = transform;
+                holding.transform.localPosition = new Vector3(.5f, 1, 0);
+                holding.transform.GetComponent<BoxCollider>().enabled = false;
+                playerScript.task = null;
+            }
+            else if (playerScript.task.transform.name.Contains("Zomble") && holding != null)
+            {
+                playerScript.task.GetComponent<SC_ZombleAI>().health--;
+            }
+        }
+
+        if (health <= 0)
+        {
+            GameObject instDeadAI = Instantiate(deadAI);
+            instDeadAI.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+            instDeadAI.transform.rotation = transform.rotation;
+            DestroyImmediate(transform.gameObject);
         }
     }
 }

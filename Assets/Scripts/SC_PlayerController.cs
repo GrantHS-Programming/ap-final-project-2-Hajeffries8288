@@ -9,12 +9,14 @@ public class SC_PlayerController : MonoBehaviour
     [HideInInspector] public Vector3 setAIDestination;
     [HideInInspector] public GameObject task;
     [HideInInspector] public int wood = 0;
+    [HideInInspector] public bool atackTask = false;
 
     public float speed = 5;
     public float shiftSpeed = 10;
     [Header("Place objects")]
     public Material placeingMat;
-    public GameObject superCoolWood;
+    //public GameObject superCoolWood;
+    //public GameObject wall;
 
     Material[] materials;
     TextMeshProUGUI woodTxt;
@@ -28,11 +30,24 @@ public class SC_PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity) && Input.GetButtonDown("Fire1"))
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
         {
-            print("Player clicked object: " + hit.transform.name);
-            setAIDestination = new Vector3(hit.point.x, 0, hit.point.z);
-            task = hit.transform.gameObject;
+            if (Input.GetButtonDown("Fire1"))
+            {
+                print("Player clicked object: " + hit.transform.name);
+                if (!hit.transform.name.Contains("Zomble") && !placeingObject)
+                {
+                    setAIDestination = new Vector3(hit.point.x, 0, hit.point.z);
+                    task = hit.transform.gameObject;
+                    atackTask = false;
+                }
+                else
+                {
+                    task = hit.transform.gameObject;
+                    atackTask = true;
+                }
+            }
+
         }
         else if (Input.GetButtonDown("Fire1"))
         {
@@ -45,7 +60,7 @@ public class SC_PlayerController : MonoBehaviour
 
         PlaceingPrefabs();
 
-        SetAIDestination();
+        Misc();
 
         Interface();
     }
@@ -72,6 +87,7 @@ public class SC_PlayerController : MonoBehaviour
             if (Input.GetButton("Fire1"))
             {
                 placeingObject.layer = 0;
+                wood -= placeingObject.GetComponent<SC_PlacableObject>().woodPrice;
                 for (int i = 0; i < placeingObject.transform.childCount; i++)
                 {
                     placeingObject.transform.GetChild(i).GetComponent<MeshRenderer>().material = materials[i];
@@ -81,9 +97,9 @@ public class SC_PlayerController : MonoBehaviour
         }
     }
 
-    public void SetAIDestination()
+    public void Misc()
     {
-        
+        if (Input.GetKeyDown(KeyCode.PageUp)) wood++;
     }
 
     public void Interface()
@@ -92,11 +108,11 @@ public class SC_PlayerController : MonoBehaviour
     }
 
     // Buttons
-    public void SuperCoolWood()
+    public void PlaceObject(GameObject objectToPlace)
     {
-        if (wood >= 2)
+        placeingObject = Instantiate(objectToPlace);
+        if (wood >= placeingObject.GetComponent<SC_PlacableObject>().woodPrice)
         {
-            placeingObject = Instantiate(superCoolWood);
             placeingObject.layer = 2;
             materials = new Material[placeingObject.transform.childCount];
             for (int i = 0; i < placeingObject.transform.childCount; i++)

@@ -37,6 +37,7 @@ public class SC_ZombleAI : MonoBehaviour
                 idle = false;
                 Debug.DrawLine(transform.position, hit.point, Color.red);
                 navMesh.destination = hit.transform.position;
+                navMesh.transform.LookAt(hit.transform);
                 if (navMesh.remainingDistance <= 2 && hit.transform.GetComponent<SC_AI>())
                 {
                     hit.transform.GetComponent<SC_AI>().health--;

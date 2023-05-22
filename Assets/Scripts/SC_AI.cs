@@ -5,13 +5,14 @@ using UnityEngine.AI;
 
 public class SC_AI : MonoBehaviour
 {
+    [HideInInspector] public GameObject holding;
+
     public float speed = 5;
     public float health = 100;
-    public GameObject deadAI;
+    public GameObject gameOverOverlay;
 
     NavMeshAgent navMesh;
     GameObject player;
-    GameObject holding;
     SC_PlayerController playerScript;
 
     void Start()
@@ -38,17 +39,7 @@ public class SC_AI : MonoBehaviour
 
         if (Vector3.Distance(transform.position, navMesh.destination) <= 1.5f && playerScript.task != null)
         {
-            if (playerScript.task.transform.name.Contains("P_Tree"))
-            {
-                playerScript.task.GetComponent<Rigidbody>().isKinematic = false;
-                playerScript.task.GetComponent<Rigidbody>().AddForce(Vector3.forward);
-                playerScript.wood++;
-                playerScript.task.transform.name = "P_DeadTree";
-                playerScript.task.GetComponent<SC_Tree>().despawn = true;
-                playerScript.task = null;
-                print("wood: " + playerScript.wood);
-            }
-            else if (playerScript.task.transform.name.Contains("Sword"))
+           if (playerScript.task.transform.name.Contains("Sword"))
             {
                 holding = playerScript.task;
                 holding.transform.parent = transform;
@@ -64,10 +55,8 @@ public class SC_AI : MonoBehaviour
 
         if (health <= 0)
         {
-            GameObject instDeadAI = Instantiate(deadAI);
-            instDeadAI.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
-            instDeadAI.transform.rotation = transform.rotation;
-            DestroyImmediate(transform.gameObject);
+            Time.timeScale = 0;
+            gameOverOverlay.SetActive(true);
         }
     }
 }

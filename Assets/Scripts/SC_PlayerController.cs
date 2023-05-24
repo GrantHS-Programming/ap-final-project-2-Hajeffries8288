@@ -7,13 +7,16 @@ using TMPro;
 public class SC_PlayerController : MonoBehaviour
 {
     [HideInInspector] public Vector3 setAIDestination;
+    [HideInInspector] public string damageTakenForDamageTxt;
     [HideInInspector] public GameObject task;
     [HideInInspector] public bool atackTask = false;
 
     public GameObject thingyMcThing;
     public GameObject AI;
+    public Texture2D textureThing;
 
     TextMeshProUGUI daysTxt;
+    TextMeshProUGUI healthTxt;
     RaycastHit hit;
     GameObject placeingObject;
     GameObject dayNight;
@@ -21,11 +24,18 @@ public class SC_PlayerController : MonoBehaviour
     void Start()
     {
         daysTxt = GameObject.Find("DaysTxt").GetComponent<TextMeshProUGUI>();
+        healthTxt = GameObject.Find("HealthTxt").GetComponent <TextMeshProUGUI>();
         dayNight = GameObject.Find("DayNightCycleObject");
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     void Update()
     {
+        if (Input.GetButton("Fire2"))
+        {
+            Cursor.SetCursor(textureThing, Vector2.zero, CursorMode.Auto);
+        }
+
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity))
         {
             if (Input.GetButtonDown("Fire1"))
@@ -43,7 +53,7 @@ public class SC_PlayerController : MonoBehaviour
                     atackTask = true;
                 }
             }
-            if (Input.GetButtonDown("Fire2"))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
                 GameObject AIHolding = AI.transform.GetComponent<SC_AI>().holding;
                 if (AIHolding)
@@ -67,5 +77,6 @@ public class SC_PlayerController : MonoBehaviour
     public void Interface()
     {
         daysTxt.text = "Days: " + dayNight.GetComponent<SC_DayNight>().days;
+        healthTxt.text = "Health: " + AI.GetComponent<SC_AI>().health;
     }
 }

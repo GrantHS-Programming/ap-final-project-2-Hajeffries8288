@@ -9,11 +9,14 @@ public class SC_AI : MonoBehaviour
 
     public float speed = 5;
     public float health = 100;
+    public float atackSpeed = 0;
     public GameObject gameOverOverlay;
 
     NavMeshAgent navMesh;
     GameObject player;
     SC_PlayerController playerScript;
+    float time;
+    float atackDamage = 0;
 
     void Start()
     {
@@ -45,11 +48,13 @@ public class SC_AI : MonoBehaviour
                 holding.transform.parent = transform;
                 holding.transform.localPosition = new Vector3(.5f, 1, 0);
                 holding.transform.GetComponent<BoxCollider>().enabled = false;
+                atackDamage = 5;
                 playerScript.task = null;
             }
-            else if (playerScript.task.transform.name.Contains("Zomble") && holding != null)
+            else if (playerScript.task.transform.name.Contains("Zomble") && holding != null && Time.time >= time)
             {
-                playerScript.task.GetComponent<SC_ZombleAI>().health--;
+                time = Time.time + atackSpeed;
+                playerScript.task.GetComponent<SC_ZombleAI>().health -= atackDamage;
             }
         }
 

@@ -169,7 +169,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   health: 100
+  atackSpeed: 0.5
   viewDistance: 5
+  timeIdleDestination: 5
+  atackDamage: 5
+  maximumIdleDestination: {x: 10, y: 10}
 --- !u!1 &4055721262505431255
 GameObject:
   m_ObjectHideFlags: 0

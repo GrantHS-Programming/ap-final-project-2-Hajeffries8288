@@ -7,18 +7,25 @@ public class SC_ZombleAI : MonoBehaviour
 {
     public float speed = 5;
     public float health = 100;
+    public float atackSpeed = 0;
     public float viewDistance = 5;
     public float timeIdleDestination = 5;
+    public int atackDamage = 5;
     public Vector2 maximumIdleDestination = new Vector2(10, 10);
 
     bool idle = true;
     float time;
+    float atackTime;
 
     NavMeshAgent navMesh;
+    GameObject player;
+    SC_PlayerController playerController;
 
     void Start()
     {
         navMesh = GetComponent<NavMeshAgent>();
+        player = GameObject.Find("Player");
+        playerController = player.GetComponent<SC_PlayerController>();
     }
 
     void Update()
@@ -38,9 +45,11 @@ public class SC_ZombleAI : MonoBehaviour
                 Debug.DrawLine(transform.position, hit.point, Color.red);
                 navMesh.destination = hit.transform.position;
                 navMesh.transform.LookAt(hit.transform);
-                if (navMesh.remainingDistance <= 2 && hit.transform.GetComponent<SC_AI>())
+                if (navMesh.remainingDistance <= 2 && hit.transform.GetComponent<SC_AI>() && Time.time >= atackTime)
                 {
-                    hit.transform.GetComponent<SC_AI>().health--;
+                    atackTime = Time.time + atackSpeed;
+                    hit.transform.GetComponent<SC_AI>().health -= atackDamage;
+                    playerController.damageTakenForDamageTxt = "-" + atackDamage;
                 }
             }
             else

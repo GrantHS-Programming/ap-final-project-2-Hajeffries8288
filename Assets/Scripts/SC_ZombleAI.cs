@@ -7,7 +7,7 @@ public class SC_ZombleAI : MonoBehaviour
 {
     public float speed = 5;
     public float health = 100;
-    public float atackSpeed = 0;
+    public float atackSpeed = 1;
     public float viewDistance = 5;
     public float timeIdleDestination = 5;
     public int atackDamage = 5;

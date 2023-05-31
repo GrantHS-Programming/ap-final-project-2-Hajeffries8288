@@ -9,14 +9,14 @@ public class SC_AI : MonoBehaviour
 
     public float speed = 5;
     public float health = 100;
-    public float atackSpeed = 0;
+    public float atackSpeed = 0.5f;
     public GameObject gameOverOverlay;
 
     NavMeshAgent navMesh;
     GameObject player;
     SC_PlayerController playerScript;
     float time;
-    float atackDamage = 0;
+    float atackDamage = 5;
 
     void Start()
     {
@@ -42,7 +42,7 @@ public class SC_AI : MonoBehaviour
 
         if (Vector3.Distance(transform.position, navMesh.destination) <= 1.5f && playerScript.task != null)
         {
-           if (playerScript.task.transform.name.Contains("Sword"))
+           if (playerScript.task.transform.name.Contains("Sword") && !holding)
             {
                 holding = playerScript.task;
                 holding.transform.parent = transform;
@@ -51,10 +51,18 @@ public class SC_AI : MonoBehaviour
                 atackDamage = 5;
                 playerScript.task = null;
             }
-            else if (playerScript.task.transform.name.Contains("Zomble") && holding != null && Time.time >= time)
+            else if (playerScript.task.transform.name.Contains("Zomble") && holding && Time.time >= time)
             {
                 time = Time.time + atackSpeed;
                 playerScript.task.GetComponent<SC_ZombleAI>().health -= atackDamage;
+            }
+           else if (playerScript.task.transform.name.Contains("PewPew") && !holding)
+            {
+                holding = playerScript.task;
+                holding.transform.parent = transform;
+                holding.transform.localPosition = new Vector3(0, 1, 0);
+                holding.transform.GetComponent<BoxCollider>().enabled = false;
+                playerScript.task = null;
             }
         }
 

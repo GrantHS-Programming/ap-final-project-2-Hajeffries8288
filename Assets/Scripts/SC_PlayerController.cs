@@ -22,7 +22,6 @@ public class SC_PlayerController : MonoBehaviour
     GameObject placeingObject;
     GameObject dayNight;
     GameObject controles;
-    GameObject pauseMenu;
     int num;
 
     void Start()
@@ -37,10 +36,10 @@ public class SC_PlayerController : MonoBehaviour
             aimThing = GameObject.Find("AimThingy");
             controles = GameObject.Find("GUIcontrolls/warning");
             pewFlash = GameObject.Find("PewFlash");
-            pauseMenu = GameObject.Find("PauseMenu");
             Cursor.lockState = CursorLockMode.Confined;
         }
         else Light.DontDestroyOnLoad(GameObject.Find("Directional Light"));
+        Time.timeScale = 1;
     }
 
     void Update()
@@ -124,6 +123,7 @@ public class SC_PlayerController : MonoBehaviour
                     {
                         AIHolding.transform.parent = null;
                         AIHolding.transform.GetComponent<BoxCollider>().enabled = true;
+                        if (AIHolding.transform.GetComponentInChildren<Animator>()) AIHolding.transform.GetComponentInChildren<Animator>().SetBool("isAnim", true);
                         AI.transform.GetComponent<SC_AI>().holding = null;
                     }
                 }

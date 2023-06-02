@@ -172,7 +172,7 @@ MonoBehaviour:
   atackSpeed: 0.5
   viewDistance: 5
   timeIdleDestination: 5
-  atackDamage: 5
+  atackDamage: 0
   maximumIdleDestination: {x: 10, y: 10}
 --- !u!1 &4055721262505431255
 GameObject:

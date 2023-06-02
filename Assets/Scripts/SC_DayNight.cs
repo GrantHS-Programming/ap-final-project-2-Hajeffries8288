@@ -22,7 +22,7 @@ public class SC_DayNight : MonoBehaviour
 
     void Update()
     {
-        if (Time.time >= time)
+        if (Time.timeSinceLevelLoad >= time)
         {
             float rotationOfNextSunStage = directionalLight.transform.rotation.x + angleSunWillRotate;
             time += secondsTellNextLightRotation;

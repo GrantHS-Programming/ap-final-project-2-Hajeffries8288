@@ -6,11 +6,13 @@ using UnityEngine.AI;
 public class SC_AI : MonoBehaviour
 {
     [HideInInspector] public GameObject holding;
+    [HideInInspector] public int ammo = 0;
 
     public float speed = 5;
     public float health = 100;
     public float atackSpeed = 0.5f;
     public GameObject gameOverOverlay;
+    public GameObject pauseGameOverlay;
 
     NavMeshAgent navMesh;
     GameObject player;
@@ -49,6 +51,7 @@ public class SC_AI : MonoBehaviour
                 holding.transform.localPosition = new Vector3(.5f, 1, 0);
                 holding.transform.GetComponent<BoxCollider>().enabled = false;
                 atackDamage = 5;
+                holding.transform.GetComponentInChildren<Animator>().SetBool("isAnim", false);
                 playerScript.task = null;
             }
             else if (playerScript.task.transform.name.Contains("Zomble") && holding && Time.time >= time)
@@ -62,6 +65,7 @@ public class SC_AI : MonoBehaviour
                 holding.transform.parent = transform;
                 holding.transform.localPosition = new Vector3(0, 1, 0);
                 holding.transform.GetComponent<BoxCollider>().enabled = false;
+                holding.transform.GetComponentInChildren<Animator>().SetBool("isAnim", false);
                 playerScript.task = null;
             }
         }
@@ -71,5 +75,20 @@ public class SC_AI : MonoBehaviour
             Time.timeScale = 0;
             gameOverOverlay.SetActive(true);
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!pauseGameOverlay.activeSelf)
+            {
+                pauseGameOverlay.SetActive(true);
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    public void ReActivateGame()
+    {
+        pauseGameOverlay.SetActive(false);
+        Time.timeScale = 1;
     }
 }

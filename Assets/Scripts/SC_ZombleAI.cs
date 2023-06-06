@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class SC_ZombleAI : MonoBehaviour
 {
+    public string zombleType = "zom";
     public float speed = 5;
     public float health = 100;
     public float atackSpeed = 1;
@@ -39,22 +40,33 @@ public class SC_ZombleAI : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, viewDistance))
         {
-            if (hit.transform.name.Contains("Human"))
+            if (zombleType == "zom")
             {
-                idle = false;
-                Debug.DrawLine(transform.position, hit.point, Color.red);
-                navMesh.destination = hit.transform.position;
-                navMesh.transform.LookAt(hit.transform);
-                if (navMesh.remainingDistance <= 2 && hit.transform.GetComponent<SC_AI>() && Time.time >= atackTime)
+                if (hit.transform.name.Contains("Human"))
                 {
-                    atackTime = Time.time + atackSpeed;
-                    hit.transform.GetComponent<SC_AI>().health -= atackDamage;
-                    playerController.damageTakenForDamageTxt = "-" + atackDamage;
+                    idle = false;
+                    Debug.DrawLine(transform.position, hit.point, Color.red);
+                    navMesh.destination = hit.transform.position;
+                    navMesh.transform.LookAt(hit.transform);
+                    if (navMesh.remainingDistance <= 2 && hit.transform.GetComponent<SC_AI>() && Time.time >= atackTime)
+                    {
+                        atackTime = Time.time + atackSpeed;
+                        hit.transform.GetComponent<SC_AI>().health -= atackDamage;
+                        playerController.damageTakenForDamageTxt = "-" + atackDamage;
+                    }
                 }
+                else idle = true;
             }
-            else
+            else if (zombleType == "range")
             {
-                idle = true;
+                if (hit.transform.name.Contains("Human"))
+                {
+                    Debug.DrawLine(transform.position, hit.point, Color.red);
+                    navMesh.transform.LookAt(hit.transform);
+                    navMesh.destination = hit.transform.position * -10;
+                    idle = false;
+                }
+                else idle = true;
             }
             Debug.DrawLine(transform.position, hit.point, Color.green);
         }
@@ -65,6 +77,7 @@ public class SC_ZombleAI : MonoBehaviour
         }
         if (health <= 0)
         {
+            transform.parent.GetComponent<SC_ZombleSpawn>().numOfZombles--;
             DestroyImmediate(transform.gameObject);
         }
     }

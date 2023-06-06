@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class SC_AI : MonoBehaviour
 {
     [HideInInspector] public GameObject holding;
-    [HideInInspector] public int ammo = 0;
 
     public float speed = 5;
     public float health = 100;
@@ -66,6 +65,12 @@ public class SC_AI : MonoBehaviour
                 holding.transform.localPosition = new Vector3(0, 1, 0);
                 holding.transform.GetComponent<BoxCollider>().enabled = false;
                 holding.transform.GetComponentInChildren<Animator>().SetBool("isAnim", false);
+                playerScript.task = null;
+            }
+           else if (playerScript.task.transform.name.Contains("Clip"))
+            {
+                playerScript.ammo += 7;
+                Destroy(playerScript.task);
                 playerScript.task = null;
             }
         }

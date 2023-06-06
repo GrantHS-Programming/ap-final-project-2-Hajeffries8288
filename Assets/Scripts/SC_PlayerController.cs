@@ -11,9 +11,11 @@ public class SC_PlayerController : MonoBehaviour
     [HideInInspector] public string damageTakenForDamageTxt;
     [HideInInspector] public GameObject task;
     [HideInInspector] public bool atackTask = false;
+    [HideInInspector] public int ammo = 0;
 
     TextMeshProUGUI daysTxt;
     TextMeshProUGUI healthTxt;
+    TextMeshProUGUI ammoTxt;
     RaycastHit hit;
     GameObject thingyMcThing;
     GameObject aimThing;
@@ -30,6 +32,7 @@ public class SC_PlayerController : MonoBehaviour
         {
             daysTxt = GameObject.Find("DaysTxt").GetComponent<TextMeshProUGUI>();
             healthTxt = GameObject.Find("HealthTxt").GetComponent<TextMeshProUGUI>();
+            ammoTxt = GameObject.Find("AmmoTxt").GetComponent<TextMeshProUGUI>();
             thingyMcThing = GameObject.Find("LastClickedSpotThingy");
             dayNight = GameObject.Find("DayNightCycleObject");
             AI = GameObject.Find("P_HumanAI");
@@ -109,12 +112,13 @@ public class SC_PlayerController : MonoBehaviour
                         atackTask = true;
                         task = hit.transform.gameObject;
                     }
-                    else
+                    else if (ammo > 0)
                     {
                         task = hit.transform.gameObject;
                         atackTask = false;
                         if (hit.transform.name.Contains("Zomble")) hit.transform.GetComponent<SC_ZombleAI>().health -= 100;
                         pewFlash.transform.GetComponentInChildren<Image>().enabled = true; // This causes flashing light
+                        ammo--;
                     }
                 }
                 if (Input.GetKeyDown(KeyCode.Q))
@@ -146,6 +150,7 @@ public class SC_PlayerController : MonoBehaviour
         {
             daysTxt.text = "Days: " + dayNight.GetComponent<SC_DayNight>().days;
             healthTxt.text = "Health: " + AI.GetComponent<SC_AI>().health;
+            ammoTxt.text = "Ammo: " + ammo;
         }
     }
 

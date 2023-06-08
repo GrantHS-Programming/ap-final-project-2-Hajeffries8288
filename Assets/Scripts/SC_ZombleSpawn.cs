@@ -16,11 +16,6 @@ public class SC_ZombleSpawn : MonoBehaviour
 
     float spawnTime;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         if (Time.time >= spawnTime)

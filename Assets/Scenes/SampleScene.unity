@@ -274,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 997241365016853344, guid: a5a7c0cd1b943de4e8d34357c16e2b56, type: 3}
     - target: {fileID: 1337411563315969900, guid: 1e3984f91c8f5f8469411dd8b0afb5cb, type: 3}
       propertyPath: maxAlive
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1337411563315969900, guid: 1e3984f91c8f5f8469411dd8b0afb5cb, type: 3}
       propertyPath: chanceForSpawn.x

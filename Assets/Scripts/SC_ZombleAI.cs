@@ -5,12 +5,14 @@ using UnityEngine.AI;
 
 public class SC_ZombleAI : MonoBehaviour
 {
+    public GameObject objToShoot;
     public string zombleType = "zom";
     public float speed = 5;
     public float health = 100;
     public float atackSpeed = 1;
     public float viewDistance = 5;
     public float timeIdleDestination = 5;
+    public float attackRange = 20;
     public int atackDamage = 5;
     public Vector2 maximumIdleDestination = new Vector2(10, 10);
 
@@ -63,12 +65,20 @@ public class SC_ZombleAI : MonoBehaviour
                 {
                     Debug.DrawLine(transform.position, hit.point, Color.red);
                     navMesh.transform.LookAt(hit.transform);
-                    navMesh.destination = hit.transform.position * -10;
+                    if ((transform.position - hit.transform.position).magnitude <= attackRange)
+                    {
+                        navMesh.destination = transform.position;
+                        GameObject instObjToShoot = Instantiate(objToShoot, transform, false);
+                        instObjToShoot.transform.position = transform.position;
+                        instObjToShoot.transform.localPosition = Vector3.zero;
+                        instObjToShoot.GetComponent<Rigidbody>().AddForce(transform.forward, ForceMode.Acceleration);
+                        instObjToShoot.transform.parent = null;
+                    }
+                    else navMesh.destination = hit.transform.position;
                     idle = false;
                 }
-                else idle = true;
             }
-            Debug.DrawLine(transform.position, hit.point, Color.green);
+            else Debug.DrawLine(transform.position, hit.point, Color.green);
         }
         else
         {

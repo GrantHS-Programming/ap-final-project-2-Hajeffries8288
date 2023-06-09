@@ -13,12 +13,14 @@ public class SC_ZombleAI : MonoBehaviour
     public float viewDistance = 5;
     public float timeIdleDestination = 5;
     public float attackRange = 20;
+    public float attackRangeSpeed;
     public int atackDamage = 5;
     public Vector2 maximumIdleDestination = new Vector2(10, 10);
 
     bool idle = true;
     float time;
     float atackTime;
+    float attackTimeRange;
 
     NavMeshAgent navMesh;
     GameObject player;
@@ -40,7 +42,7 @@ public class SC_ZombleAI : MonoBehaviour
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, viewDistance))
+        if (Physics.Raycast(transform.position, transform.forward, out hit, viewDistance, 1>>0))
         {
             if (zombleType == "zom")
             {
@@ -67,12 +69,17 @@ public class SC_ZombleAI : MonoBehaviour
                     navMesh.transform.LookAt(hit.transform);
                     if ((transform.position - hit.transform.position).magnitude <= attackRange)
                     {
-                        navMesh.destination = transform.position;
-                        GameObject instObjToShoot = Instantiate(objToShoot, transform, false);
-                        instObjToShoot.transform.position = transform.position;
-                        instObjToShoot.transform.localPosition = Vector3.zero;
-                        instObjToShoot.GetComponent<Rigidbody>().AddForce(transform.forward, ForceMode.Acceleration);
-                        instObjToShoot.transform.parent = null;
+                        if (Time.time >= attackTimeRange)
+                        {
+                            navMesh.destination = transform.position;
+                            GameObject instObjToShoot = Instantiate(objToShoot, transform, false);
+                            instObjToShoot.transform.position = transform.position;
+                            instObjToShoot.transform.localPosition = Vector3.forward;
+                            instObjToShoot.transform.parent = null;
+                            instObjToShoot.GetComponent<Rigidbody>().AddForce(transform.forward * 10, ForceMode.Impulse);
+
+                            attackTimeRange = Time.time + attackRangeSpeed;
+                        }
                     }
                     else navMesh.destination = hit.transform.position;
                     idle = false;

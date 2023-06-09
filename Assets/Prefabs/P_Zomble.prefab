@@ -167,12 +167,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48707c565b008dc4ca53a84e537f0651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objToShoot: {fileID: 0}
   zombleType: zom
   speed: 5
   health: 100
   atackSpeed: 0.5
   viewDistance: 5
   timeIdleDestination: 5
+  attackRange: 20
+  attackRangeSpeed: 0
   atackDamage: 5
   maximumIdleDestination: {x: 10, y: 10}
 --- !u!1 &4055721262505431255

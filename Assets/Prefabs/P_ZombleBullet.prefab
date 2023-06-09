@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2196221564664427250}
   - component: {fileID: 1059510257175350876}
   - component: {fileID: 7547580448730889258}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7200157067660530993}
   - component: {fileID: 1191442217504991005}
   - component: {fileID: 4817250079224026752}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: P_ZombleBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ SphereCollider:
   m_GameObject: {fileID: 7812953789061567432}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.3
   m_Center: {x: 0, y: 0, z: 0}

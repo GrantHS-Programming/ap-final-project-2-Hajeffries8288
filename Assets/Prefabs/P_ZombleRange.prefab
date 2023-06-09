@@ -175,6 +175,7 @@ MonoBehaviour:
   viewDistance: 50
   timeIdleDestination: 5
   attackRange: 20
+  attackRangeSpeed: 0.5
   atackDamage: 5
   maximumIdleDestination: {x: 10, y: 10}
 --- !u!1 &4055721262505431255
